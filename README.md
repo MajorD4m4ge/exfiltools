@@ -16,7 +16,7 @@ ICMP exfiltration utility for Metasploit icmp_exfil.
 optional arguments:
   -h, --help            show this help message and exit
   
-  -i IPAddress, --ipaddress / The destination IP Address.
+  -i, --ipaddress / The destination IP Address.
 
   -f, --file / The file to exfiltrate.
   
