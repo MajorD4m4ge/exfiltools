@@ -20,4 +20,4 @@
 #------------
 
 alert icmp any any -> any any (msg:"Metasploit ICMP Exfil Start"; icode:0; itype:8; content:"BOF"; sid:1000000)
-alert icmp any any -> any any (msg:"Metasploit ICMP Exfil End"; icode:0; itype:8; content:"END"; sid:1000001)
+alert icmp any any -> any any (msg:"Metasploit ICMP Exfil End"; icode:0; itype:8; content:"EOF"; sid:1000001)
