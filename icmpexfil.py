@@ -18,7 +18,7 @@ exfilhash = ''
 # https://community.rapid7.com/community/metasploit/blog/2014/01/01/fun-with-icmp-exfiltration
 #TODO Add size for payload
 def signal_handler(signal, frame):
-        print('CTRL-C Pressed. Exiting.')
+        Completed(True)
         sys.exit(0)
 signal.signal(signal.SIGINT, signal_handler)
 
@@ -153,10 +153,12 @@ def Header(ipaddress, file, compress, chunksize):
     print('+--------------------------------------------------------------------------+')
 
 
-def Completed():
-    print('+--------------------------------------------------------------------------+')
-    print('| Transferred file MD5: ' + str(exfilhash).ljust(51) + '|')
-    print('+--------------------------------------------------------------------------+')
+def Completed(cancel):
+    if cancel:
+        print('| Cancelled.                                                               |')
+    else:
+        print('+--------------------------------------------------------------------------+')
+        print('| Transferred file MD5: ' + str(exfilhash).ljust(51) + '|')
     print('| [*] Completed.                                                           |')
     print('+--------------------------------------------------------------------------+')
 
@@ -221,7 +223,7 @@ def main(argv):
     else:
         print('| [-] Failed.                                                              |')
         Failed(error)
-    Completed()
+    Completed(False)
 
     #except:
     #    sys.exit(1)
