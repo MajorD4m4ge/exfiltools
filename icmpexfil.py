@@ -145,12 +145,14 @@ def Header(ipaddress, file, compress, chunksize):
     print('| Date Run: ' + str(datetime.datetime.now()).ljust(63) + '|')
     print('+--------------------------------------------------------------------------+')
     print('| Destination IP: ' + str(ipaddress).ljust(57) + '|')
-    print('+--------------------------------------------------------------------------+')
-    print('| Source File    : ' + str(file).ljust(56) + '|')
-    print('| Source File MD5: ' + str(genMD5(file)).ljust(56) + '|')
+        print('+--------------------------------------------------------------------------+')
+    print('| Source File     : ' + str(file).ljust(55) + '|')
+    print('| Source File Size: ' + str(file).ljust(55) + '|')
+    print('| Source File MD5 : ' + str(os.stat(file).st_size).ljust(55) + '|')
     if compress:
-        print('| Compression enabled.                                                     |')
+        print('| Compression:      Enabled.                                               |')
     if chunksize >= 1:
+        print('| Compression:      Disabled.                                              |')
         print('| Size of chunk: ' + str(chunksize).ljust(58) + '|')
     print('+--------------------------------------------------------------------------+')
 
