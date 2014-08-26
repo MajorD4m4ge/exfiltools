@@ -9,6 +9,7 @@ import hashlib
 import zlib
 import platform
 import os
+import signal
 
 debug = 0
 nping = ''
@@ -16,6 +17,11 @@ exfilhash = ''
 # https://raw.githubusercontent.com/todb/junkdrawer/master/exfiltrate-data.rb
 # https://community.rapid7.com/community/metasploit/blog/2014/01/01/fun-with-icmp-exfiltration
 #TODO Add size for payload
+def signal_handler(signal, frame):
+        print('CTRL-C Pressed. Exiting.')
+        sys.exit(0)
+signal.signal(signal.SIGINT, signal_handler)
+
 
 def is64bit():
     if platform.machine().endswith('64'):
