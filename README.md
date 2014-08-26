@@ -16,13 +16,13 @@ ICMP exfiltration utility for Metasploit icmp_exfil.
 optional arguments:
   -h, --help            show this help message and exit
   
-  -i IPAdress, --ipaddress IPAdress The destination IP Address.
+  -i IPAddress, --ipaddress / The destination IP Address.
 
-  -f FILE, --file FILE  The file to exfiltrate.
+  -f, --file / The file to exfiltrate.
   
-  -s SIZE, --size SIZE  Size of data packet (This will be double due to encoding).
+  -s, --size / size of data packet.
 
-  -c, --compress  Enable zlib compression. To retrieve "cat file | xxd -r -ps | openssl zlib -d | tee >(md5sum) > out"
+  -c, --compress / Enable zlib compression. To retrieve "cat file | xxd -r -ps | openssl zlib -d | tee >(md5sum) > out"
   
   --version             show program's version number and exit
   
