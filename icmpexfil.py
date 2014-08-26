@@ -16,7 +16,9 @@ nping = ''
 exfilhash = ''
 # https://raw.githubusercontent.com/todb/junkdrawer/master/exfiltrate-data.rb
 # https://community.rapid7.com/community/metasploit/blog/2014/01/01/fun-with-icmp-exfiltration
-#TODO Add size for payload
+#TODO Add time between packets
+#TODO Add file size in output (Before and after compression)
+
 def signal_handler(signal, frame):
         Completed(True)
         sys.exit(0)
