@@ -141,7 +141,7 @@ def Header(ipaddress, file, compress, chunksize):
     print('+--------------------------------------------------------------------------+')
     print('|ICMP Exfiltration Utility                                                 |')
     print('+---------------------------------------------------------------------------')
-    print('|Author: Tahir Khan - tkhan9@gmu.edu                                       |')
+    print('|Author: TK                                                                |')
     print('+--------------------------------------------------------------------------+')
     print('| Date Run: ' + str(datetime.datetime.now()).ljust(63) + '|')
     print('+--------------------------------------------------------------------------+')
